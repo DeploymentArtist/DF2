@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sequence version="3.00" name="ViaMonstra Standard Server Post-OS Task Sequence" description="Sample Custom Task Sequence">
+  <group expand="true" name="Init" description="" disable="false" continueOnError="false">
+    <action />
+    <step type="BDD_Gather" name="Gather" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+      <defaultVarList>
+        <variable name="GatherLocalOnly" property="GatherLocalOnly">false</variable>
+        <variable name="RulesFile" property="RulesFile"></variable>
+      </defaultVarList>
+      <action>cscript.exe "%SCRIPTROOT%\ZTIGather.wsf"</action>
+    </step>
+  </group>
+  <group expand="true" name="State Restore" description="" disable="false" continueOnError="false">
+    <action />
+    <step type="SMS_TaskSequence_SetVariableAction" name="Set Phase" description="" disable="false" continueOnError="false" successCodeList="0 3010">
+      <defaultVarList>
+        <variable name="VariableName" property="VariableName">PHASE</variable>
+        <variable name="VariableValue" property="VariableValue">STATERESTORE</variable>
+      </defaultVarList>
+      <action>cscript.exe "%SCRIPTROOT%\ZTISetVariable.wsf"</action>
+    </step>
+    <step type="SMS_TaskSequence_ApplyNetworkSettingsAction" name="Apply Network Settings" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+      <defaultVarList>
+        <variable name="OSDAdapterCount" property="NumAdapters">0</variable>
+        <variable name="OSDAdapter" property="Adapters">0</variable>
+      </defaultVarList>
+      <action>cscript.exe "%SCRIPTROOT%\ZTINICConfig.wsf"</action>
+    </step>
+    <step name="Tattoo" disable="false" continueOnError="true" successCodeList="0 3010" description="" startIn="">
+      <action>cscript.exe "%SCRIPTROOT%\ZTITatoo.wsf"</action>
+      <defaultVarList>
+        <variable name="RunAsUser" property="RunAsUser">false</variable>
+        <variable name="SMSTSRunCommandLineUserName" property="SMSTSRunCommandLineUserName"></variable>
+        <variable name="SMSTSRunCommandLineUserPassword" property="SMSTSRunCommandLineUserPassword"></variable>
+        <variable name="LoadProfile" property="LoadProfile">false</variable>
+      </defaultVarList>
+    </step>
+    <group expand="true" name="Base OS Configuration" description="" disable="false" continueOnError="false">
+      <step type="BDD_InstallRoles" name="Install Roles and Features" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="OSRoles" property="OSRoles"></variable>
+          <variable name="OSRoleServices" property="OSRoleServices"></variable>
+          <variable name="OSFeatures" property="OSFeatures">SNMP-Services,SNMP-Service,SNMP-WMI-Provider</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTIOSRole.wsf"</action>
+      </step>
+      <step type="BDD_InstallApplication" name="Configure - ViaMonstra - Configure Remote Administration" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="ApplicationGUID" property="ApplicationGUID">{6ceddafc-ca5f-4951-bfa1-9bb19ad1b767}</variable>
+          <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+      </step>
+      <step type="BDD_InstallApplication" name="Configure - ViaMonstra - ZTISNMPConfiguration" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="ApplicationGUID" property="ApplicationGUID">{940fa1f9-e215-4d42-9b55-a4c3eb52c924}</variable>
+          <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+      </step>
+      <step type="BDD_InstallApplication" name="Install - SlySoft - Virtual Clone Drive" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="ApplicationGUID" property="ApplicationGUID">{f36c4377-5841-4c36-aab4-7c796d6d3d61}</variable>
+          <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+      </step>
+      <step type="BDD_InstallApplication" name="Install - Microsoft - BGInfo (Sysinternals)" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="ApplicationGUID" property="ApplicationGUID">{ea9aa4a0-240b-40eb-ac1c-6a4c4ff3bc2f}</variable>
+          <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+        </defaultVarList>
+        <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+      </step>
+      <step type="SMS_TaskSequence_RebootAction" name="Restart computer" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="SMSRebootMessage" property="Message" />
+          <variable name="SMSRebootTimeout" property="MessageTimeout">60</variable>
+          <variable name="SMSRebootTarget" property="Target" />
+        </defaultVarList>
+        <action>smsboot.exe /target:WinPE</action>
+      </step>
+      <action />
+    </group>
+    <group expand="true" name="Agent Install &amp; Config" description="" disable="false" continueOnError="false">
+      <action />
+      <group expand="true" name="SCOM Agent" description="" disable="false" continueOnError="false">
+        <action />
+        <step type="BDD_InstallApplication" name="Install - SCOM Agent" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+          <defaultVarList>
+            <variable name="ApplicationGUID" property="ApplicationGUID">{97d18aab-1d37-4841-8b15-80b615d219d7}</variable>
+            <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+          </defaultVarList>
+          <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+        </step>
+      </group>
+      <group expand="true" name="SCDPM Agent" description="" disable="false" continueOnError="false">
+        <action />
+        <step type="BDD_InstallApplication" name="Install - SCDPM Agent" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+          <defaultVarList>
+            <variable name="ApplicationGUID" property="ApplicationGUID">{57dd5015-ebd1-4fa8-bf14-4a3ec5717ff0}</variable>
+            <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+          </defaultVarList>
+          <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+        </step>
+        <step type="SMS_TaskSequence_RunCommandLineAction" name="Configure - Microsoft - Set DPM Server" description="" disable="false" continueOnError="false" startIn="" successCodeList="0 3010" runIn="WinPEandFullOS">
+          <defaultVarList>
+            <variable name="PackageID" property="PackageID" />
+            <variable name="RunAsUser" property="RunAsUser">false</variable>
+            <variable name="SMSTSRunCommandLineUserName" property="SMSTSRunCommandLineUserName"></variable>
+            <variable name="SMSTSRunCommandLineUserPassword" property="SMSTSRunCommandLineUserPassword"></variable>
+            <variable name="LoadProfile" property="LoadProfile">false</variable>
+          </defaultVarList>
+          <action>"C:\Program Files\Microsoft Data Protection Manager\DPM\bin\SetDpmServer.exe" -dpmservername dpm01.corp.viamonstra.com</action>
+        </step>
+      </group>
+      <condition>
+        <expression type="SMS_TaskSequence_VariableConditionExpression">
+          <variable name="Variable">ViaManaged</variable>
+          <variable name="Operator">equals</variable>
+          <variable name="Value">YES</variable>
+        </expression>
+      </condition>
+      <step type="SMS_TaskSequence_RebootAction" name="Restart computer" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+        <defaultVarList>
+          <variable name="SMSRebootMessage" property="Message" />
+          <variable name="SMSRebootTimeout" property="MessageTimeout">60</variable>
+          <variable name="SMSRebootTarget" property="Target" />
+        </defaultVarList>
+        <action>smsboot.exe /target:WinPE</action>
+      </step>
+    </group>
+    <step name="Windows Update (Pre-Application Installation)" disable="false" continueOnError="true" successCodeList="0 3010" description="" startIn="">
+      <action>cscript.exe "%SCRIPTROOT%\ZTIWindowsUpdate.wsf"</action>
+      <defaultVarList>
+        <variable name="RunAsUser" property="RunAsUser">false</variable>
+        <variable name="SMSTSRunCommandLineUserName" property="SMSTSRunCommandLineUserName"></variable>
+        <variable name="SMSTSRunCommandLineUserPassword" property="SMSTSRunCommandLineUserPassword"></variable>
+        <variable name="LoadProfile" property="LoadProfile">false</variable>
+      </defaultVarList>
+    </step>
+    <step type="BDD_InstallApplication" name="Install Applications" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+      <defaultVarList>
+        <variable name="ApplicationGUID" property="ApplicationGUID"></variable>
+        <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+      </defaultVarList>
+      <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+    </step>
+    <step name="Windows Update (Post-Application Installation)" disable="false" continueOnError="true" successCodeList="0 3010" description="" startIn="">
+      <action>cscript.exe "%SCRIPTROOT%\ZTIWindowsUpdate.wsf"</action>
+      <defaultVarList>
+        <variable name="RunAsUser" property="RunAsUser">false</variable>
+        <variable name="SMSTSRunCommandLineUserName" property="SMSTSRunCommandLineUserName"></variable>
+        <variable name="SMSTSRunCommandLineUserPassword" property="SMSTSRunCommandLineUserPassword"></variable>
+        <variable name="LoadProfile" property="LoadProfile">false</variable>
+      </defaultVarList>
+    </step>
+  </group>
+  <step type="BDD_InstallApplication" name="ViaMonstra - ZTISendEmail" description="" disable="false" continueOnError="false" runIn="WinPEandFullOS" successCodeList="0 3010">
+    <defaultVarList>
+      <variable name="ApplicationGUID" property="ApplicationGUID">{8d43ab03-3bbf-4856-bd38-feb0e8d52e88}</variable>
+      <variable name="ApplicationSuccessCodes" property="ApplicationSuccessCodes">0 3010</variable>
+    </defaultVarList>
+    <action>cscript.exe "%SCRIPTROOT%\ZTIApplications.wsf"</action>
+  </step>
+</sequence>

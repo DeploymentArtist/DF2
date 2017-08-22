@@ -1,0 +1,82 @@
+<job id="Install-NetFrameWork351">
+<script language="VBScript" src="..\..\scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Purpose: Used to install Net Framwork 3.51 
+'// Usage: cscript Install-NetFrameWork351.wsf [/debug:true]
+'// Version: 1.0 - 6 Sep 2011 - Mikael Nystrom
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess
+ProcessResults iRetVal
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	
+	Dim sApplicationName
+	Dim sSourceDir
+
+	sSourceDir = oUtility.ScriptDir & "\Source"
+	sApplicationName = "NetFrameWork351"
+
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Starting " & sApplicationName & " installation", LogTypeInfo
+
+	'// Disable Zone Checks
+	oEnv("SEE_MASK_NOZONECHECKS") = 1 
+
+	iRetVal = oUtility.RunWithHeartbeat(sSourceDir & "\dotnetfx35.exe /passive /norestart")
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Return code from command = " & iRetVal, LogTypeInfo
+
+	iRetVal = oUtility.RunWithHeartbeat(sSourceDir & "\NDP20SP2-KB958481-x86.exe /passive /norestart")
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Return code from command = " & iRetVal, LogTypeInfo
+
+	iRetVal = oUtility.RunWithHeartbeat(sSourceDir & "\NDP30SP2-KB958483-x86.exe /passive /norestart")
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Return code from command = " & iRetVal, LogTypeInfo
+
+	iRetVal = oUtility.RunWithHeartbeat(sSourceDir & "\NDP35SP1-KB958484-x86.exe /passive /norestart")
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Return code from command = " & iRetVal, LogTypeInfo
+
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Finished " & sApplicationName & " installation", LogTypeInfo
+	
+	'/// Enable Zone Checks
+	oEnv.Remove("SEE_MASK_NOZONECHECKS")
+
+End Function 
+
+</script>
+</job>

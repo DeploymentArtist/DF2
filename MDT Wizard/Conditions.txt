@@ -1,0 +1,1 @@
+UCase(Property("SkipViaComputerSettings"))<>"YES" and Property("DeploymentType")<>"REPLACE" and Property("DeploymentType")<>"UPGRADE"

@@ -1,0 +1,102 @@
+<job id="ZTISendEmail">
+<script language="VBScript" src="..\..\Scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Solution: Hydration
+'// Purpose: Used to Send Email
+'// Usage: cscript sendemail.wsf [/debug:true]
+'// Version: 1.2 - 27 Dec 2010 - Johan Arwidmark
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess 
+ProcessResults iRetVal 
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	oLogging.CreateEntry "ZTISendEmail: Send email to administrator", LogTypeInfo	
+	
+	Dim emailObj, emailConfig
+	Set emailObj      = CreateObject("CDO.Message")
+	emailObj.From     = oEnvironment.item("OSDSendMailFrom")
+	emailObj.To       = oEnvironment.item("OSDSendMailTo")
+	emailObj.Subject  = oEnvironment.item("OSDSendMailSubject")
+	emailObj.TextBody = oEnvironment.item("OSDSendMailBody")
+
+	' Attach log file if requested
+	If ucase(oEnvironment.item("OSDSendMailIncludeBDDLog")) = "YES" Then
+		If oFSO.FileExists(oLogging.LogPath & "\BDD.Log") then
+		oLogging.CreateEntry "ZTISendEmail: Attaching BDD.Log", LogTypeInfo	
+			emailObj.AddAttachment oLogging.LogPath & "\BDD.Log"
+		End If
+	End if
+	
+	Set emailConfig = emailObj.Configuration
+	emailConfig.Fields("http://schemas.microsoft.com/cdo/configuration/smtpserver") =  oEnvironment.item("OSDSendMailSMTPServer")
+	emailConfig.Fields("http://schemas.microsoft.com/cdo/configuration/smtpserverport") = 25
+	emailConfig.Fields("http://schemas.microsoft.com/cdo/configuration/sendusing") = 2
+	emailConfig.Fields("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = 0
+	emailConfig.Fields("http://schemas.microsoft.com/cdo/configuration/smtpusessl") = false
+	emailConfig.Fields("http://schemas.microsoft.com/cdo/configuration/sendusername") = oEnvironment.item("OSDSendMailFrom")
+	emailConfig.Fields.Update
+
+	emailObj.Send
+
+	Set emailobj	= nothing
+	Set emailConfig	= nothing
+	
+	oLogging.CreateEntry "ZTISendMail: Email Sent...", LogTypeInfo	
+	
+End Function 
+
+</script>
+</job>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

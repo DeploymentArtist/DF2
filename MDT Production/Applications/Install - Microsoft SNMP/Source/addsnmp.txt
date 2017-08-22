@@ -1,0 +1,1 @@
+sysocmgr /i:%windir%\inf\sysoc.inf /u:"c:\Documents and Settings\Administrator.VIAMONSTRA\snmpsetup.txt"

@@ -1,0 +1,85 @@
+<job id="Install-SCOMAgent">
+<script language="VBScript" src="..\..\scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Solution: Hydration
+'// Purpose: Used to install System Center DPM Agent 
+'// Usage: cscript Install-SCOMAgent.wsf [/debug:true]
+'// Version: 1.0 - 6 June 2011 - Mikael Nystrom
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess
+ProcessResults iRetVal
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	Dim sFile
+	Dim sApplicationName
+	Dim objService
+	Dim objExecute
+	
+	sApplicationName = "SC OM Agent"
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Starting " & sApplicationName & " installation", LogTypeInfo
+
+	if oEnvironment.item("Architecture") = "X64" then  
+		sFile = oUtility.ScriptDir & "\source\x64\MOMAgent.msi"
+	Elseif oEnvironment.item("Architecture") = "X86" then
+		sFile = oUtility.ScriptDir & "\source\x86\MOMAgent.msi"
+	End if	
+
+	If not oFSO.FileExists(sFile) then
+		oLogging.CreateEntry "Install-" & sApplicationName & ": " & sFile & " was not found, unable to install " & sApplicationName & "", LogTypeError
+		ZTIProcess = Failure
+		Exit Function
+	End if
+		
+	iRetVal = oUtility.RunWithHeartbeat("""msiexec"" /i """ & sFile & """ /qb USE_SETTINGS_FROM_AD=0 MANAGEMENT_GROUP=VIAMONSTRA MANAGEMENT_SERVER_DNS=scom01.corp.viamonstra.com ACTIONS_USE_COMPUTER_ACCOUNT=1 USE_MANUALLY_SPECIFIED_SETTINGS=1 SET_ACTIONS_ACCOUNT=1")
+	
+	if (iRetVal = 0) or (iRetVal = 3010) then
+		ZTIProcess = Success 
+	Else 
+		ZTIProcess = Failure
+	End If
+	
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Return code from command = " & iRetVal, LogTypeInfo
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Finished " & sApplicationName & " installation", LogTypeInfo
+
+End Function 
+
+</script>
+</job>

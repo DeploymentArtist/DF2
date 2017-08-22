@@ -1,0 +1,70 @@
+<job id="Config-DisableScreenSaver">
+<script language="VBScript" src="..\..\scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Purpose: Used to Disable the Screen Saver 
+'// Usage: cscript Config-DisableScreenSaver.wsf [/debug:true]
+'// Version: 1.0 - 7 Sep 2011 - Mikael Nystrom
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess
+ProcessResults iRetVal
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	Dim sCommand
+	Dim sConfigname
+	
+	sConfigName = "Config-DisableScreenSaver"
+	oLogging.CreateEntry sConfigName & ": Starting " & sConfigName, LogTypeInfo
+	
+'//	Run a command
+'//	sCommand = "cmd /c dir"
+'//	iRetVal = oShell.Run(sCommand)
+'//	oLogging.CreateEntry sConfigName & ": Return code from command = " & iRetVal, LogTypeInfo
+
+'//	Set a reg value
+	oShell.RegWrite "HKCU\Control Panel\Desktop\ScreenSaveTimeOut", "0", "REG_SZ"
+	oShell.RegWrite "HKCU\Control Panel\Desktop\ScreenSaveActive", "0", "REG_SZ"
+
+	oLogging.CreateEntry sConfigName & ": Finished " & sConfigName, LogTypeInfo
+	
+End Function 
+
+</script>
+</job>

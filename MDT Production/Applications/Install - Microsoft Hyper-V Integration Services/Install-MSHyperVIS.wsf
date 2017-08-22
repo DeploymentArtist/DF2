@@ -1,0 +1,78 @@
+<job id="Install-MSHyperVIC">
+<script language="VBScript" src="..\..\scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Purpose: Used to install Hyper-V Integrated Components
+'// Usage: cscript Install-MSHyperVIC.wsf [/debug:true]
+'// Version: 1.0 - 6 Sep 2011 - Mikael Nystrom
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess
+ProcessResults iRetVal
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	Dim sFile
+	Dim sApplicationName
+	
+	sApplicationName = "MSHyperVIC"
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Starting " & sApplicationName & " installation", LogTypeInfo
+	
+	sFile = oUtility.ScriptDir & "\Source\support\x86\setup.exe"
+
+	If not oFSO.FileExists(sFile) then
+		oLogging.CreateEntry "Install-" & sApplicationName & ": " & sFile & " was not found, unable to install " & sApplicationName & "", LogTypeError
+		ZTIProcess = Failure
+		Exit Function
+	End if
+
+	iRetVal = oUtility.RunWithHeartbeat("" & sFile & " /quiet /norestart""")
+	
+	if (iRetVal = 0) or (iRetVal = 3010) or (iRetVal = 60004) then
+		ZTIProcess = Success 
+	Else 
+		ZTIProcess = Failure
+	End If
+	
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Return code from command = " & iRetVal, LogTypeInfo
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Finished " & sApplicationName & " installation", LogTypeInfo
+	
+End Function 
+
+</script>
+</job>

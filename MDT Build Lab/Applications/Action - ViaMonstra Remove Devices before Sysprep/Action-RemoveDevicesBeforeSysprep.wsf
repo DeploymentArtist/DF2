@@ -1,0 +1,78 @@
+<job id="Action-RemoveDevicesBeforeSysprep">
+<script language="VBScript" src="..\..\scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Purpose: Action - Remove Devicec before Sysprep 
+'// Usage: cscript Action-RemoveDevicesBeforeSysprep.wsf [/debug:true]
+'// Version: 1.0 - 9 Sep 2011 - Mikael Nystrom
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess
+ProcessResults iRetVal
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	Dim sFile
+	Dim sApplicationName
+	
+	sApplicationName = "Action-RemoveDevicesBeforeSysprep"
+	oLogging.CreateEntry sApplicationName & ": Starting " & sApplicationName & " installation", LogTypeInfo
+	
+	sFile = oUtility.ScriptDir & "\Source\devcon\i386\devcon.exe"
+	
+	If not oFSO.FileExists(sFile) then
+		oLogging.CreateEntry sApplicationName & ": " & sFile & " was not found, unable to install " & sApplicationName & "", LogTypeError
+		ZTIProcess = Failure
+		Exit Function
+	End if
+
+	iRetVal = oUtility.RunWithHeartbeat(sFile & " remove ACPI\VMBUS")
+	
+	if (iRetVal = 0) or (iRetVal = 3010) then
+		ZTIProcess = Success 
+	Else 
+		ZTIProcess = Failure
+	End If
+	
+	oLogging.CreateEntry sApplicationName & ": Return code from command = " & iRetVal, LogTypeInfo
+	oLogging.CreateEntry sApplicationName & ": Finished " & sApplicationName & " installation", LogTypeInfo
+	
+End Function 
+
+</script>
+</job>

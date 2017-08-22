@@ -1,0 +1,69 @@
+<job id="Action-TurnOffFirewall">
+<script language="VBScript" src="..\..\scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Purpose: Used to Stop the firewall service
+'// Usage: cscript Action-TurnOffFirewall.wsf [/debug:true]
+'// Version: 1.0 - 8 Sep 2011 - Mikael Nystrom
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess
+ProcessResults iRetVal
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	Dim sAction
+	
+	sAction = "Action-TurnOffFirewall"
+	oLogging.CreateEntry sAction & ": Starting ", LogTypeInfo
+
+	iRetVal = oUtility.RunWithHeartbeat("net stop sharedaccess")
+	
+	if (iRetVal = 0) or (iRetVal = 3010) then
+		ZTIProcess = Success 
+	Else 
+		ZTIProcess = Failure
+	End If
+	
+	oLogging.CreateEntry sAction & ": Return code from command = " & iRetVal, LogTypeInfo
+	oLogging.CreateEntry sAction & ": Finished ", LogTypeInfo
+	
+End Function 
+
+</script>
+</job>

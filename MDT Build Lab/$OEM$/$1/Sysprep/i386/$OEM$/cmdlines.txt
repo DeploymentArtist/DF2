@@ -1,0 +1,2 @@
+[Commands]
+"C:\Sysprep\Sysprep -clean"

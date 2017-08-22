@@ -1,0 +1,100 @@
+<job id="Install-Install-BGInfo">
+<script language="VBScript" src="..\..\scripts\ZTIUtility.vbs"/>
+<script language="VBScript"> 
+
+'//----------------------------------------------------------------------------
+'// Solution: Hydration
+'// Purpose: Used to install BGInfo 
+'// Usage: cscript Install-Install-BGInfo.wsf [/debug:true]
+'// Version: 1.0 - 29 May 2011 - Mikael Nystrom
+'//
+'// This script is provided "AS IS" with no warranties, confers no rights and 
+'// is not supported by the authors or Deployment Artist. 
+'// is not supported by the authors or Deployment Artist. 
+'//
+'//----------------------------------------------------------------------------
+
+'//----------------------------------------------------------------------------
+'// Global constant and variable declarations
+'//---------------------------------------------------------------------------- 
+
+Option Explicit 
+
+Dim iRetVal 
+Dim sApplicationName
+
+'//----------------------------------------------------------------------------
+'// End declarations
+'//---------------------------------------------------------------------------- 
+
+'//----------------------------------------------------------------------------
+'// Main routine
+'//---------------------------------------------------------------------------- 
+
+On Error Resume Next
+iRetVal = ZTIProcess
+ProcessResults iRetVal
+On Error Goto 0 
+
+'//---------------------------------------------------------------------------
+'//
+'// Function: ZTIProcess()
+'//
+'// Input: None
+'// 
+'// Return: Success - 0
+'// Failure - non-zero
+'//
+'// Purpose: Perform main ZTI processing
+'// 
+'//---------------------------------------------------------------------------
+Function ZTIProcess() 
+
+	Dim sFile1
+	Dim sSourceFolder
+	Dim sDestFolder
+	Dim sAutoStart
+	Dim sAutoStartLnk
+	Dim oShellLink
+	Dim sCommand
+	Dim sRunCommand
+	Dim sRunArgs
+	
+	sApplicationName = "BGInfo"
+	sSourceFolder = oUtility.ScriptDir & "\source"
+	sDestFolder = oShell.ExpandEnvironmentStrings("%PROGRAMFILES%") & "\" & sApplicationName
+	sFile1 = sSourceFolder & "\Bginfo.exe"
+	sAutoStart = oShell.SpecialFolders("AllUsersStartup")
+	sRunCommand = sDestFolder & "\Bginfo.exe"
+	sRunArgs =  sDestFolder & "\default.bgi /TIMER:0 /SILENT /NOLICPROMPT"
+
+	set oShellLink = oShell.CreateShortcut(sAutoStart & "\BGI.lnk")
+		
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Starting " & sApplicationName & " installation", LogTypeInfo
+
+	If not oFSO.FileExists(sFile1) then
+		oLogging.CreateEntry "Install-" & sApplicationName & ": " & sFile1 & " was not found, unable to install " & sApplicationName & "", LogTypeError
+		ZTIProcess = Failure
+		Exit Function
+	End if
+
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Creating folder " & sDestFolder, LogTypeInfo
+	oFSO.CreateFolder sDestFolder
+
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Copy from  " & sSourceFolder & " to " & sDestFolder, LogTypeInfo
+	oFSO.CopyFolder sSourceFolder, sDestFolder
+	
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Creating shortcut", LogTypeInfo
+         oShellLink.TargetPath = sRunCommand
+		 oShellLink.Arguments = sRunArgs
+         oShellLink.WindowStyle = 7
+         oShellLink.IconLocation = "%SystemRoot%\system32\SHELL32.dll, 34"
+         oShellLink.WorkingDirectory = sDestFolder
+         oShellLink.Save
+
+	oLogging.CreateEntry "Install-" & sApplicationName & ": Finished " & sApplicationName & " installation", LogTypeInfo
+	
+End Function 
+
+</script>
+</job>

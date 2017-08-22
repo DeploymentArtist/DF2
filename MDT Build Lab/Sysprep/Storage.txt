@@ -1,0 +1,136 @@
+[Sysprep]
+;   BuildMassStorageSection = Yes
+
+
+[SysprepMassStorage]
+;
+; Added for DELL SAS 6 IR Support
+;
+PCI\VEN_1000&DEV_0054&SUBSYS_1F041028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+PCI\VEN_1000&DEV_0054&SUBSYS_1F071028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+PCI\VEN_1000&DEV_0054&SUBSYS_1F081028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+PCI\VEN_1000&DEV_0054&SUBSYS_1F091028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+PCI\VEN_1000&DEV_0058&SUBSYS_1F0E1028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+PCI\VEN_1000&DEV_0058&SUBSYS_1F0F1028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+PCI\VEN_1000&DEV_0058&SUBSYS_1F101028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+PCI\VEN_1000&DEV_0058&SUBSYS_021D1028=C:\Drivers\Ref_Dell_SAS_6\symmpi.inf
+;
+; Added for Intel SATA Controller Support
+;
+PCI\VEN_8086&DEV_2682&CC_0104=C:\Drivers\Ref_IntelSATA\iastor.inf
+PCI\VEN_8086&DEV_27C3&CC_0104=C:\Drivers\Ref_IntelSATA\iastor.inf
+PCI\VEN_8086&DEV_27C6&CC_0104=C:\Drivers\Ref_IntelSATA\iastor.inf
+PCI\VEN_8086&DEV_2822&CC_0104=C:\Drivers\Ref_IntelSATA\iastor.inf
+PCI\VEN_8086&DEV_282A&CC_0104=C:\Drivers\Ref_IntelSATA\iastor.inf
+PCI\VEN_8086&DEV_2653&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+PCI\VEN_8086&DEV_2681&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+PCI\VEN_8086&DEV_27C1&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+PCI\VEN_8086&DEV_27C5&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+PCI\VEN_8086&DEV_2821&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+PCI\VEN_8086&DEV_2829&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+PCI\VEN_8086&DEV_2922&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+PCI\VEN_8086&DEV_5029&CC_0106=C:\Drivers\Ref_IntelSATA\iaahci.inf
+;
+; Added for VMware VMSCSI Support
+;
+PCI\VEN_104B&DEV_1040=C:\Drivers\Ref_VMSCSI\vmscsi.inf
+;
+; Added for VMware LSILogic SCSI Support
+;
+PCI\VEN_1000&DEV_0621=C:\Drivers\Ref_lsilogic\symmpi.inf
+PCI\VEN_1000&DEV_0622=C:\Drivers\Ref_lsilogic\symmpi.inf
+PCI\VEN_1000&DEV_0624=C:\Drivers\Ref_lsilogic\symmpi.inf
+PCI\VEN_1000&DEV_0626=C:\Drivers\Ref_lsilogic\symmpi.inf
+PCI\VEN_1000&DEV_0628=C:\Drivers\Ref_lsilogic\symmpi.inf
+PCI\VEN_1000&DEV_0030=C:\Drivers\Ref_lsilogic\symmpi.inf
+PCI\VEN_1000&DEV_0032=C:\Drivers\Ref_lsilogic\symmpi.inf
+;
+; Added for Smart Array E200i support
+;
+PCI\VEN_103C&DEV_3220&SUBSYS_3225103C=C:\Drivers\Ref_SmartArrayE200i\hpcissx2.inf
+PCI\VEN_103C&DEV_3230&SUBSYS_3234103C=C:\Drivers\Ref_SmartArrayE200i\hpcissx2.inf
+PCI\VEN_103C&DEV_3230&SUBSYS_3235103C=C:\Drivers\Ref_SmartArrayE200i\hpcissx2.inf
+PCI\VEN_103C&DEV_3238&SUBSYS_3212103C=C:\Drivers\Ref_SmartArrayE200i\hpcissx2.inf
+PCI\VEN_103C&DEV_3238&SUBSYS_3211103C=C:\Drivers\Ref_SmartArrayE200i\hpcissx2.inf
+;
+; Added for ich4ide Controller Support
+;
+PCI\VEN_8086&DEV_24CB=C:\Drivers\Ref_IntelInf\ich4ide.inf
+PCI\VEN_8086&DEV_24CA=C:\Drivers\Ref_IntelInf\ich4ide.inf
+;
+; Added for ich5ide Controller Support
+;
+PCI\VEN_8086&DEV_24D1=C:\Drivers\Ref_IntelInf\ich5ide.inf
+PCI\VEN_8086&DEV_24DB=C:\Drivers\Ref_IntelInf\ich5ide.inf
+PCI\VEN_8086&DEV_25A2=C:\Drivers\Ref_IntelInf\ich5ide.inf
+PCI\VEN_8086&DEV_25A3=C:\Drivers\Ref_IntelInf\ich5ide.inf
+;
+; Added for ich6ide Controller Support
+;
+PCI\VEN_8086&DEV_2651=C:\Drivers\Ref_IntelInf\ich6ide.inf
+PCI\VEN_8086&DEV_2652=C:\Drivers\Ref_IntelInf\ich6ide.inf
+PCI\VEN_8086&DEV_2653=C:\Drivers\Ref_IntelInf\ich6ide.inf
+PCI\VEN_8086&DEV_266F=C:\Drivers\Ref_IntelInf\ich6ide.inf
+;
+; Added for ich7ide Controller Support
+;
+PCI\VEN_8086&DEV_27C0=C:\Drivers\Ref_IntelInf\ich7ide.inf
+PCI\VEN_8086&DEV_27C4=C:\Drivers\Ref_IntelInf\ich7ide.inf
+PCI\VEN_8086&DEV_27DF=C:\Drivers\Ref_IntelInf\ich7ide.inf
+;
+; Added for ich8ide Controller Support
+;
+PCI\VEN_8086&DEV_2820=C:\Drivers\Ref_IntelInf\ich8ide.inf
+PCI\VEN_8086&DEV_2825=C:\Drivers\Ref_IntelInf\ich8ide.inf
+PCI\VEN_8086&DEV_2828=C:\Drivers\Ref_IntelInf\ich8ide.inf
+PCI\VEN_8086&DEV_2850=C:\Drivers\Ref_IntelInf\ich8ide.inf
+;
+; Added for ich9ide Controller Support
+;
+PCI\VEN_8086&DEV_2920=C:\Drivers\Ref_IntelInf\ich9ide.inf
+PCI\VEN_8086&DEV_2921=C:\Drivers\Ref_IntelInf\ich9ide.inf
+PCI\VEN_8086&DEV_2926=C:\Drivers\Ref_IntelInf\ich9ide.inf
+PCI\VEN_8086&DEV_2928=C:\Drivers\Ref_IntelInf\ich9ide.inf
+PCI\VEN_8086&DEV_292D=C:\Drivers\Ref_IntelInf\ich9ide.inf
+PCI\VEN_8086&DEV_292E=C:\Drivers\Ref_IntelInf\ich9ide.inf
+;
+; Added for Intel 631xESB/6321ESB/3100 Serial ATA Controller Support
+;
+PCI\VEN_8086&DEV_2680=C:\Drivers\Ref_IntelInf\ESB2ide.inf
+PCI\VEN_8086&DEV_269E=C:\Drivers\Ref_IntelInf\ESB2ide.inf
+;
+; Below driverlist is Common XP builtin drivers
+;
+Primary_IDE_Channel=%systemroot%\inf\mshdc.inf
+Secondary_IDE_Channel=%systemroot%\inf\mshdc.inf
+PCMCIA\*PNP0600=%systemroot%\inf\mshdc.inf
+*PNP0600=%systemroot%\inf\mshdc.inf
+PCMCIA\KME-KXLC005-A99E=%systemroot%\inf\mshdc.inf
+PCMCIA\_-NinjaATA--3768=%systemroot%\inf\mshdc.inf
+PCMCIA\FUJITSU-IDE-PC_CARD-DDF2=%systemroot%\inf\mshdc.inf
+*AZT0502=%systemroot%\inf\mshdc.inf
+PCI\CC_0101=%systemroot%\inf\mshdc.inf
+PCI\VEN_10B9&DEV_5215=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_2441=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_244A=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_244B=%systemroot%\inf\mshdc.inf
+PCI\VEN_10B9&DEV_5219=%systemroot%\inf\mshdc.inf
+PCI\VEN_10B9&DEV_5229=%systemroot%\inf\mshdc.inf
+PCI\VEN_1097&DEV_0038=%systemroot%\inf\mshdc.inf
+PCI\VEN_1095&DEV_0640=%systemroot%\inf\mshdc.inf
+PCI\VEN_1095&DEV_0646=%systemroot%\inf\mshdc.inf
+PCI\VEN_0E11&DEV_AE33=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_1222=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_1230=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_7010=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_7111=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_2411=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_2421=%systemroot%\inf\mshdc.inf
+PCI\VEN_8086&DEV_7199=%systemroot%\inf\mshdc.inf
+PCI\VEN_1042&DEV_1000=%systemroot%\inf\mshdc.inf
+PCI\VEN_1039&DEV_0601=%systemroot%\inf\mshdc.inf
+PCI\VEN_1039&DEV_5513=%systemroot%\inf\mshdc.inf
+PCI\VEN_10AD&DEV_0001=%systemroot%\inf\mshdc.inf
+PCI\VEN_10AD&DEV_0150=%systemroot%\inf\mshdc.inf
+
+

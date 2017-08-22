@@ -1,0 +1,53 @@
+<h1>Configure the computer settings.</h1>
+<h2>Select Server Configuration.</h2>
+<span style="width: 95%;">
+<table border="1" cellspacing="1" cellpadding="1" width="600" align="left">
+<tbody>
+      <tr>
+      <tr>
+        <td width="350" align="left"><span class="Larger">Server Configuration? </span></td>
+        <td>
+        <Select name="ViaMonstraServerConfig">
+	<option value="VIABASE" SELECTED >Base Server </option>
+	<option value="VIASQL">SQL Server</option>	<option value="VIAWEB">Web Server </option>
+       </Select>
+      </td>
+</tbody>
+</table>
+</span>
+<h2>Configure the Network Settings.</h2>
+To enable static IP address assignment you must select "No" in use DHCP option.
+<span style="width: 95%;">
+<table border="1" cellspacing="1" cellpadding="1" width="600" align="left">
+<tbody>
+      <tr>
+        <td width="360" align="left"><span class="Larger">Number of network adapters to configure</span></td>
+        <td><input style="width: 240px" name="OSDAdapterCount" value="1" Readonly /></td>
+      </tr>
+      <tr>
+        <td width="360" align="left"><span class="Larger">Use DHCP?</span></td>
+        <td>
+        <Select name="OSDAdapter0EnableDHCP">
+	<option value="True" SELECTED >Yes </option>
+	<option value="False">No</option>
+       </Select>
+      </tr>
+      <tr>
+        <td width="360" align="left"><span class="Larger">IP Address(s) </span></td>
+        <td><input style="width: 240px" name="OSDAdapter0IPAddressList" /></td>
+      </tr>
+      <tr>
+        <td width="360" align="left"><span class="Larger">Subnet Mask(s) </span></td>
+        <td><input style="width: 240px" name="OSDAdapter0SubnetMask" /></td>
+      </tr>
+      <tr>
+        <td width="360" align="left"><span class="Larger">Default Gateway(s) </span></td>
+        <td><input style="width: 240px" name="OSDAdapter0Gateways" /></td>
+      </tr>
+      <tr>
+        <td width="360" align="left"><span class="Larger">DNS Server(s) </span></td>
+        <td><input style="width: 240px" name="OSDAdapter0DNSServerList" /></td>
+      </tr>
+</tbody>
+</table>
+</span>
